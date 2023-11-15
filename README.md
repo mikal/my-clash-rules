@@ -11,16 +11,15 @@
 
 # 使用方法
 1. 以[肥羊订阅转换](https://suburl.v1.mk/)为例，进入转换界面，填入订阅链接（机场或自建）[自用1](https://mojie.me/#/register?code=r6vEgPYZ) [自用2](https://www.bixiny.org/index.php#/register?code=wsjRyqCr)
-2. 点击`自定义配置`![转换页面](imgs/image.png){width=50%}
+2. 点击`自定义配置`![转换页面](imgs/image.png)
 3. 同时打开仓库里面的“.ini”结尾的文件[地址](https://raw.githubusercontent.com/deardeer7/custom-clash-rules/main/custom%20rules.ini)，复制**文件内容**，粘贴到`远程配置文件上传`页面中![远程配置文件上传](imgs/image-1.png)
 4. 检查`远程配置`，如图则成功![检查远程配置](imgs/image-2.png)
-5. 根据自己偏好配置其他选项，生成订阅链接（ps:网站支持自定义短链接后缀）
+5. 根据自己偏好配置其他选项，生成订阅链接（ps: 网站支持自定义短链接后缀）
 6. 导入clash即可~~
 
-~~
-1. 以我常用的“[ACL4SSR在线订阅转换](https://acl4ssr-sub.github.io/)”为例
-1. 点击“进阶模式”
-2. 导入订阅链接（机场、自建的）[自用1](https://mojie.me/#/register?code=r6vEgPYZ) [自用2](https://www.bixiny.org/index.php#/register?code=wsjRyqCr)
-3. 远程配置把这个仓库里面的“.ini”结尾的文件[地址](https://raw.githubusercontent.com/deardeer7/custom-clash-rules/main/custom%20rules.ini)填上去
-4. 转换导入clash即可
-~~
+
+~~1. 以我常用的“[ACL4SSR在线订阅转换](https://acl4ssr-sub.github.io/)”为例~~
+~~1. 点击“进阶模式”~~
+~~2. 导入订阅链接（机场、自建的）[自用1](https://mojie.me/#/register?code=r6vEgPYZ) [自用2](https://www.bixiny.org/index.php#/register?code=wsjRyqCr)~~
+~~3. 远程配置把这个仓库里面的“.ini”结尾的文件[地址](https://raw.githubusercontent.com/deardeer7/custom-clash-rules/main/custom%20rules.ini)填上去~~
+~~4. 转换导入clash即可~~
