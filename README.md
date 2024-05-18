@@ -9,7 +9,7 @@
 
 1. 以我常用的“[ACL4SSR在线订阅转换](https://acl4ssr-sub.github.io/)”为例
 2. 点击“进阶模式”
-3. 导入订阅链接（机场、自建的）[自用1](https://mojie.me/#/register?code=r6vEgPYZ) [自用2](https://www.bixiny.org/index.php#/register?code=wsjRyqCr)
+3. 导入订阅链接（机场、自建的），参考我的机场：[机场测评](airport.md)
 4. 远程配置把这个仓库里面的“.ini”结尾的文件[地址](https://raw.githubusercontent.com/deardeer7/custom-clash-rules/main/custom%20rules.ini)填上去
 5. 转换导入clash即可~
 
@@ -18,7 +18,7 @@
 <details>
 <summary>肥羊订阅转换</summary>
 
-1. 以[肥羊订阅转换](https://suburl.v1.mk/)为例，进入转换界面，填入订阅链接（机场或自建）[自用1](https://mojie.me/#/register?code=r6vEgPYZ) [自用2](https://www.bixiny.org/index.php#/register?code=wsjRyqCr)
+1. 以[肥羊订阅转换](https://suburl.v1.mk/)为例，进入转换界面，填入订阅链接（机场或自建）参考我的机场：[机场测评](airport.md)
 2. 点击`自定义配置`![转换页面](imgs/image.png)
 3. 同时打开仓库里面的“.ini”结尾的文件[地址](https://raw.githubusercontent.com/deardeer7/custom-clash-rules/main/custom%20rules.ini)，复制**文件内容**，粘贴到`远程配置文件上传`页面中![远程配置文件上传](imgs/image-1.png)
 4. 检查`远程配置`，如图则成功![检查远程配置](imgs/image-2.png)
@@ -28,6 +28,8 @@
 </details>
 
 # 更新日志
+
+2024/5/18 重命名订阅类别为 `限量`和`限时`，注意节点分类规则仅仅适用于[我的机场](airport.md)
 
 2024/3/18 更新节点分组名称，如香港 -> 小香港，美国 -> 小美国等，其他节点分组名称不变
 
