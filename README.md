@@ -28,6 +28,8 @@
 </details>
 
 # 更新日志
+2024/7/22 更新“全球直连“规则列表，添加Synology规则
+
 2024/7/2 更新GTP规则列表，并将Gemini和Copilot合并在其中；新增Github和IP归属地伪装分流；新增“故障转移”分组. 感谢[cutethotw大神的Clash规则给予参考](https://github.com/cutethotw/ClashRule)
 
 2024/5/18 重命名订阅类别为 `限量`和`限时`，注意节点分类规则仅仅适用于[我的机场](airport.md)
