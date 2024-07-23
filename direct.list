@@ -11,6 +11,10 @@ DOMAIN-SUFFIX,uwn.com
 ## > e-TXT
 DOMAIN-SUFFIX,ujxsw.net
 
+# IP detection 
+DOMAIN-SUFFIX,testipv6.cn
+DOMAIN-SUFFIX,test-ipv6.com
+
 # scholar
 DOMAIN-SUFFIX,acm.org
 DOMAIN-SUFFIX,acs.org
