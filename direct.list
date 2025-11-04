@@ -15,6 +15,9 @@ DOMAIN-SUFFIX,ujxsw.net
 DOMAIN-SUFFIX,testipv6.cn
 DOMAIN-SUFFIX,test-ipv6.com
 
+# Cn Shopping 
+DOMAIN-SUFFIX,malldongli.com
+
 # scholar
 DOMAIN-SUFFIX,acm.org
 DOMAIN-SUFFIX,acs.org
