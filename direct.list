@@ -14,6 +14,7 @@ DOMAIN-SUFFIX,ujxsw.net
 # IP detection 
 DOMAIN-SUFFIX,testipv6.cn
 DOMAIN-SUFFIX,test-ipv6.com
+DOMAIN-SUFFIX,ip-api.istatmenus.app
 
 # Cn Shopping 
 DOMAIN-SUFFIX,malldongli.com
