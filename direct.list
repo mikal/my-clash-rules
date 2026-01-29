@@ -5,6 +5,9 @@ DOMAIN-SUFFIX,deardeer.fun
 DOMAIN-SUFFIX,czlx.email
 DOMAIN-SUFFIX,chenzl.fun
 
+# airport
+IP-CIDR,47.112.1.138/32
+
 #Unfi
 DOMAIN-SUFFIX,ui.com
 DOMAIN-SUFFIX,uwn.com
