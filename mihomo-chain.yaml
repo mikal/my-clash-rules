@@ -1,0 +1,628 @@
+# Mihomo 链式代理配置文件
+# 基于原有规则，支持链式代理功能
+# 更新时间：2026年2月3日
+
+# 代理提供者配置 - 请填入您的订阅链接
+proxy-providers:
+  Mihomo-chain-relay:
+    url: "++++"
+    type: http
+    interval: 86400
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 300
+    proxy: DIRECT
+  Mihomo-chain-exit:
+    url: "xxxxxxxxxxxx"
+    type: http
+    interval: 86400
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 300
+    proxy: DIRECT
+
+# 全局配置
+port: 7890
+socks-port: 7891
+redir-port: 7892
+mixed-port: 7893
+tproxy-port: 7894
+allow-lan: true
+bind-address: "*"
+ipv6: true
+unified-delay: true
+tcp-concurrent: true
+log-level: warning
+find-process-mode: 'strict'
+global-client-fingerprint: chrome
+keep-alive-idle: 600
+keep-alive-interval: 15
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+# 外部控制器
+external-controller: 0.0.0.0:9090
+secret: ""
+
+# 流量嗅探
+sniffer:
+  enable: true
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+    TLS:
+      ports: [443, 8443]
+    QUIC:
+      ports: [443, 8443]
+  skip-domain:
+    - "Mijia Cloud"
+    - "+.push.apple.com"
+    - "+.wechatapp.com"
+    - "+.wechat.com"
+    - "+.qq.com"
+
+# TUN 配置
+tun:
+  enable: true
+  stack: mixed
+  dns-hijack: ["any:53", "tcp://any:53"]
+  device: mihomo
+  auto-route: true
+  strict-route: true
+  auto-redirect: true
+  auto-detect-interface: true
+
+# DNS 配置
+dns:
+  enable: true
+  listen: 0.0.0.0:1053
+  ipv6: true
+  respect-rules: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter-mode: blacklist
+  fake-ip-filter:
+    - "+.lan"
+    - "+.local"
+    - "rule-set:private_domain,cn_domain"
+    - "+.msftconnecttest.com"
+    - "+.msftncsi.com"
+    - "time.*.com"
+    - "+.market.xiaomi.com"
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  direct-nameserver:
+   - 223.5.5.5
+   - 119.29.29.29
+  proxy-server-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+
+# 代理组模板
+std: &std
+  {type: select, proxies: [🚀 手动选择, CF官方优选, 🔮 负载均衡, 🔯 故障转移, 🔗 链式代理, 🇭🇰 香港节点, 🇺🇸 美国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇼🇸 台湾节点, ♻️ 自动选择, 🇰🇷 韩国节点, 🇨🇦 加拿大节点, 🇬🇧 英国节点, 🇫🇷 法国节点, 🇩🇪 德国节点, 🇳🇱 荷兰节点, 🇹🇷 土耳其节点, 🌐 其他地区, 🎯 全球直连]}
+
+dir: &dir
+  {type: select, proxies: [🎯 全球直连, 🚀 手动选择, 🔗 链式代理, 🇭🇰 香港节点, 🇺🇸 美国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇼🇸 台湾节点, ♻️ 自动选择, 🌐 其他地区]}
+
+# 代理组配置
+proxy-groups:
+;设置规则标志位
+;以下规则，按照从上往下的顺序遍历，优先命中上位规则，规则重复无影响
+;修改顺序会影响分流效果
+
+;本地地址和域名直连
+ruleset=🎯 全球直连,[]GEOSITE,private
+ruleset=🎯 全球直连,[]GEOIP,private,no-resolve
+;本项目收录的直连规则
+ruleset=🎯 全球直连,clash-classic:https://testingcf.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Direct_Classical.yaml,28800
+;本项目收录的代理规则
+ruleset=🚀 手动选择,clash-classic:https://testingcf.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Proxy_Classical.yaml,28800
+;谷歌在国内可用的域名直连
+ruleset=🎯 全球直连,[]GEOSITE,google-cn
+;国内游戏域名直连
+ruleset=🎯 全球直连,[]GEOSITE,category-games@cn
+;Steam 下载 CDN 直连
+ruleset=🎯 全球直连,clash-classic:https://testingcf.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Steam_CDN_Classical.yaml,28800
+;各大游戏平台下载域名直连
+ruleset=🎯 全球直连,[]GEOSITE,category-game-platforms-download
+;BT Tracker 相关域名直连
+ruleset=🎯 全球直连,[]GEOSITE,category-public-tracker
+;即时通讯包括了 Telegram/WhatsApp/Line 等海外主流即时通讯软件域名
+ruleset=🎯 全球直连,https://raw.githubusercontent.com/mikal/my-clash-rules/main/direct.list
+;个人自定义直连网站名单
+ruleset=🎯 全球直连,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Synology/Synology.list
+;群晖网站名单
+ruleset=🚫 广告拦截,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list
+ruleset=💬 即时通讯,[]GEOSITE,category-communication
+;社交媒体包括了 Twitter(X)/Facebook/Instagram 等海外主流社交媒体
+ruleset=⚫ NotJP,https://raw.githubusercontent.com/mikal/my-clash-rules/main/notjp.list
+ruleset=🌐 社交媒体,[]GEOSITE,category-social-media-!cn
+ruleset=🤖 ChatGPT,[]GEOSITE,openai
+ruleset=🤖 Copilot,[]GEOSITE,bing
+ruleset=🤖 AI服务,[]GEOSITE,category-ai-!cn
+ruleset=🚀 GitHub,[]GEOSITE,github
+;测速工具包括 SpeedTest 等主流测速工具域名
+ruleset=🚀 测速工具,[]GEOSITE,category-speedtest
+ruleset=🎮 Steam,[]GEOSITE,steam
+ruleset=📹 YouTube,[]GEOSITE,youtube
+ruleset=🎥 AppleTV+,[]GEOSITE,apple-tvplus
+ruleset=🍎 苹果服务,[]GEOSITE,apple
+ruleset=Ⓜ️ 微软服务,[]GEOSITE,microsoft
+ruleset=📢 谷歌FCM,[]GEOSITE,googlefcm
+ruleset=🇬 谷歌服务,[]GEOSITE,google
+ruleset=🎶 TikTok,[]GEOSITE,tiktok
+ruleset=🎥 Netflix,[]GEOSITE,netflix
+ruleset=🎥 DisneyPlus,[]GEOSITE,disney
+ruleset=🎥 HBO,[]GEOSITE,hbo
+ruleset=🎥 PrimeVideo,[]GEOSITE,primevideo
+;Emby 包括主流 Emby 服务相关域名
+ruleset=📺 Emby,https://raw.githubusercontent.com/mikal/my-clash-rules/main/emby.list
+ruleset=🎻 Spotify,[]GEOSITE,spotify
+ruleset=📺 Bahamut,[]GEOSITE,bahamut
+ruleset=🎮 游戏平台,[]GEOSITE,category-games
+ruleset=🌎 国外媒体,[]GEOSITE,category-entertainment
+ruleset=🛒 国外电商,[]GEOSITE,category-ecommerce
+ruleset=🚀 手动选择,[]GEOSITE,gfw
+ruleset=💬 即时通讯,[]GEOIP,telegram,no-resolve
+ruleset=🌐 社交媒体,[]GEOIP,twitter,no-resolve
+ruleset=🌐 社交媒体,[]GEOIP,facebook,no-resolve
+ruleset=🇬 谷歌服务,[]GEOIP,google,no-resolve
+ruleset=🎥 Netflix,[]GEOIP,netflix,no-resolve
+;由于 OpenClash 使用的大陆白名单收录不全，此处留有 geosite:cn 作为国内域名兜底
+ruleset=🎯 全球直连,[]GEOSITE,cn
+;由于 OpenClash 使用的大陆白名单收录不全，此处留有 geoip:cn 作为国内 IP 兜底
+ruleset=🎯 全球直连,[]GEOIP,cn,no-resolve
+;以上兜底规则会根据实际情况随时取消
+;PT/BT 优化开启会使 80/443 以外端口的流量直连
+ruleset=🔀 非标端口,clash-classic:https://testingcf.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Port_Direct.yaml,28800
+;国内冷门域名会命中漏网之鱼，如影响使用，请设置漏网之鱼直连
+;漏网之鱼直连时，无法通过 DNS 泄露测试，但是并不存在泄露
+ruleset=🐟 漏网之鱼,[]FINAL
+;设置规则标志位结束
+
+;设置节点分组标志位
+;节点地区分组参考本项目推荐机场而设立
+
+
+;下方参数请勿修改
+enable_rule_generator=true
+overwrite_original_rules=true
+  # 主要代理组
+  - name: "🚀 手动选择"
+    type: select
+    proxies: [♻️ 自动选择, 🔗 链式代理, 🇭🇰 香港节点, 🇺🇸 美国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇼🇸 台湾节点, 🇰🇷 韩国节点, 🇨🇦 加拿大节点, 🇬🇧 英国节点, 🇫🇷 法国节点, 🇩🇪 德国节点, 🇳🇱 荷兰节点, 🇹🇷 土耳其节点, 🌐 其他地区, 🎯 全球直连]
+    icon: "https://ghproxy.inklazy.com/raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/icon/qure/color/Proxy.png"
+
+  - name: "♻️ 自动选择"
+    type: url-test
+    include-all: true
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Global.png?raw=true"
+
+  # 链式代理核心组
+  - name: "🔗 链式代理"
+    type: relay
+    proxies: [中转节点选择, 落地节点选择]
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Zune.png?raw=true"
+
+  - name: "中转节点选择"
+    type: select
+    use: [Mihomo-chain-relay]
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Zune.png?raw=true"
+
+  - name: "落地节点选择"
+    type: select
+    use: [Mihomo-chain-exit]
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Hong_Kong.png?raw=true"
+
+  # 应用专用代理组
+  - name: "💬 即时通讯"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Telegram.png?raw=true"
+
+  - name: "🌐 社交媒体"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Twitter.png?raw=true"
+
+  - name: "🚀 GitHub"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/GitHub.png?raw=true"
+
+  - name: "🤖 ChatGPT"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/ChatGPT.png?raw=true"
+
+  - name: "🤖 Copilot"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Microsoft.png?raw=true"
+
+  - name: "🤖 AI服务"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/ChatGPT.png?raw=true"
+
+  - name: "⚫ NotJP"
+    type: select
+    proxies: [🎯 全球直连, 🚀 手动选择, 🔗 链式代理, 🇭🇰 香港节点, 🇺🇸 美国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇼🇸 台湾节点, 🇰🇷 韩国节点]
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Japan.png?raw=true"
+
+  - name: "🎶 TikTok"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/TikTok.png?raw=true"
+
+  - name: "📹 YouTube"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/YouTube.png?raw=true"
+
+  - name: "🎥 Netflix"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Netflix_b.png?raw=true"
+
+  - name: "🎥 DisneyPlus"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Disney.png?raw=true"
+
+  - name: "🎥 HBO"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/HBO.png?raw=true"
+
+  - name: "🎥 PrimeVideo"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Prime_Video.png?raw=true"
+
+  - name: "🎥 AppleTV+"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Apple_TV.png?raw=true"
+
+  - name: "📺 Emby"
+    type: select
+    proxies: [🇭🇰 香港节点, 🇺🇸 美国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇼🇸 台湾节点, 🇰🇷 韩国节点, 🇨🇦 加拿大节点, 🇬🇧 英国节点, 🇫🇷 法国节点, 🇩🇪 德国节点, 🇳🇱 荷兰节点, 🇹🇷 土耳其节点, 🌐 其他地区, 🚀 手动选择, ♻️ 自动选择, 🎯 全球直连]
+    filter: "(Emby)"
+    include-all: true
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Emby.png?raw=true"
+
+  - name: "🎻 Spotify"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Spotify.png?raw=true"
+
+  - name: "📺 Bahamut"
+    type: select
+    proxies: [🇼🇸 台湾节点, 🚀 手动选择, 🎯 全球直连]
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Bahamut.png?raw=true"
+
+  - name: "🌎 国外媒体"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Streaming.png?raw=true"
+
+  - name: "🛒 国外电商"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/PayPal_business.png?raw=true"
+
+  - name: "📢 谷歌FCM"
+    <<: *dir
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/FCM_Firebase_Cloud_Messaging.png?raw=true"
+
+  - name: "🇬 谷歌服务"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Google.png?raw=true"
+
+  - name: "🍎 苹果服务"
+    <<: *dir
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Apple_black.png?raw=true"
+
+  - name: "Ⓜ️ 微软服务"
+    <<: *dir
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Microsoft.png?raw=true"
+
+  - name: "🎮 游戏平台"
+    <<: *dir
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/EPIC.png?raw=true"
+
+  - name: "🎮 Steam"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Steam.png?raw=true"
+
+  - name: "🚀 测速工具"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/SpeedTest.png?raw=true"
+
+  # 地区节点组
+  - name: "🇭🇰 香港节点"
+    type: select
+    include-all: true
+    filter: "(?i)港|hk|hongkong|hong kong"
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Hong_Kong.png?raw=true"
+
+  - name: "🇺🇸 美国节点"
+    type: select
+    include-all: true
+    filter: "(?i)美|us|unitedstates|united states"
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/USA.png?raw=true"
+
+  - name: "🇯🇵 日本节点"
+    type: select
+    include-all: true
+    filter: "(?i)日|jp|japan"
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Japan.png?raw=true"
+
+  - name: "🇸🇬 新加坡节点"
+    type: select
+    include-all: true
+    filter: "(?i)新加坡|坡|狮城|SG|Singapore"
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Singapore.png?raw=true"
+
+  - name: "🇼🇸 台湾节点"
+    type: select
+    include-all: true
+    filter: "(?i)台|tw|taiwan"
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Taiwan.png?raw=true"
+
+  - name: "🇰🇷 韩国节点"
+    type: select
+    include-all: true
+    filter: "(?i)韩|kr|korea"
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/South_Korea.png?raw=true"
+
+  - name: "🇨🇦 加拿大节点"
+    type: select
+    include-all: true
+    filter: "(?i)加拿大|canada|ca"
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Canada.png?raw=true"
+
+  - name: "🇬🇧 英国节点"
+    type: select
+    include-all: true
+    filter: "(?i)英|uk|britain|united kingdom"
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/United_Kingdom.png?raw=true"
+
+  - name: "🇫🇷 法国节点"
+    type: select
+    include-all: true
+    filter: "(?i)法|fr|france"
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/France.png?raw=true"
+
+  - name: "🇩🇪 德国节点"
+    type: select
+    include-all: true
+    filter: "(?i)德|de|germany"
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Germany.png?raw=true"
+
+  - name: "🇳🇱 荷兰节点"
+    type: select
+    include-all: true
+    filter: "(?i)荷兰|nl|netherlands"
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Netherlands.png?raw=true"
+
+  - name: "🇹🇷 土耳其节点"
+    type: select
+    include-all: true
+    filter: "(?i)土耳其|tr|turkey"
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Turkey.png?raw=true"
+
+  # 负载均衡和故障转移
+  - name: "🔮 负载均衡"
+    type: load-balance
+    include-all: true
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Load_Balance.png?raw=true"
+
+  - name: "🔯 故障转移"
+    type: fallback
+    include-all: true
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Fallback.png?raw=true"
+
+  - name: "🌐 其他地区"
+    type: select
+    include-all: true
+    filter: "^(?!.*(港|HK|hk|Hong Kong|HongKong|hongkong|深港|美|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|US|United States|UnitedStates|日本|川日|东京|大阪|泉日|埼玉|沪日|深日|(?<!尼|-)日|JP|Japan|🇯🇵|新加坡|坡|狮城|SG|Singapore|台|新北|彰化|TW|Taiwan|KR|Korea|KOR|首尔|韩|韓|加拿大|Canada|渥太华|温哥华|卡尔加里|英国|Britain|United Kingdom|England|伦敦|法国|France|巴黎|德国|Germany|柏林|法兰克福|荷兰|Netherlands|阿姆斯特丹|土耳其|Turkey|Türkiye)).*"
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Global.png?raw=true"
+
+  - name: "🐟 漏网之鱼"
+    <<: *std
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Omission.png?raw=true"
+
+  - name: "🔀 非标端口"
+    type: select
+    proxies: [🐟 遵循规则, 🎯 全球直连]
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Global.png?raw=true"  
+
+  - name: "🎯 全球直连"
+    type: select
+    proxies: [DIRECT]
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Direct.png?raw=true"
+
+  - name: "🚫 广告拦截"
+    type: select
+    proxies: [REJECT, DIRECT]
+    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/AdBlock.png?raw=true"
+
+  - name: "🐟 遵循规则"
+    type: select
+    proxies: [🐟 漏网之鱼]
+
+# 分流规则
+rules:
+  # 本地地址和域名直连
+  - RULE-SET,private_ip,🎯 全球直连,no-resolve
+  - RULE-SET,private_domain,🎯 全球直连
+  
+  # 本项目收录的直连规则
+  - RULE-SET,custom-direct,🎯 全球直连
+  
+  # 本项目收录的代理规则
+  - RULE-SET,custom-proxy,🚀 手动选择
+  
+  # AI 服务
+  - RULE-SET,ai,🤖 ChatGPT
+  
+  # Steam 相关
+  - RULE-SET,steam_cn,🎯 全球直连
+  - RULE-SET,steam,🎮 Steam
+  
+  # 测速工具
+  - RULE-SET,speedtest_domain,🚀 测速工具
+  
+  # GitHub
+  - RULE-SET,github_domain,🚀 GitHub
+  
+  # 谷歌服务
+  - RULE-SET,google_fcm,📢 谷歌FCM
+  - RULE-SET,youtube_domain,📹 YouTube
+  - RULE-SET,google_domain,🇬 谷歌服务
+  - RULE-SET,google_ip,🇬 谷歌服务,no-resolve
+  
+  # 微软服务
+  - RULE-SET,onedrive_domain,Ⓜ️ 微软服务
+  - RULE-SET,microsoft_domain,Ⓜ️ 微软服务
+  
+  # 苹果服务
+  - RULE-SET,apple_cn_domain,🎯 全球直连
+  - RULE-SET,apple_domain,🍎 苹果服务
+  - RULE-SET,apple_ip,🍎 苹果服务,no-resolve
+  
+  # TikTok
+  - RULE-SET,tiktok_domain,🎶 TikTok
+  
+  # Telegram
+  - RULE-SET,telegram_domain,💬 即时通讯
+  - RULE-SET,telegram_ip,💬 即时通讯,no-resolve
+  
+  # Netflix
+  - RULE-SET,netflix_domain,🎥 Netflix
+  - RULE-SET,netflix_ip,🎥 Netflix,no-resolve
+  
+  # PayPal
+  - RULE-SET,paypal_domain,🛒 国外电商
+  
+  # Epic Games
+  - RULE-SET,epic,🎮 游戏平台
+  
+  # NotJP 规则
+  - RULE-SET,notjp-list,⚫ NotJP
+  
+  # Emby 规则
+  - RULE-SET,emby-list,📺 Emby
+  
+  # 广告拦截
+  - RULE-SET,banad,🚫 广告拦截
+  
+  # 国外网站
+  - RULE-SET,geolocation-!cn,🐟 漏网之鱼
+  
+  # 国内域名和 IP 直连
+  - RULE-SET,cn_domain,🎯 全球直连
+  - RULE-SET,cn_ip,🎯 全球直连
+  
+  # 漏网之鱼
+  - MATCH,🐟 漏网之鱼
+
+# 规则提供者锚点
+rule-anchor:
+  ip: &ip {type: http, interval: 86400, behavior: ipcidr, format: mrs}
+  domain: &domain {type: http, interval: 86400, behavior: domain, format: mrs}
+  class: &class {type: http, interval: 86400, behavior: classical, format: text}
+
+# 规则提供者配置
+rule-providers: 
+  # 私有域名和 IP
+  private_domain: { <<: *domain, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs"}
+  private_ip: {<<: *ip, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs"}
+  
+  # 自定义规则
+  custom-direct:
+    type: http
+    behavior: classical
+    url: "https://testingcf.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Direct_Classical.yaml"
+    path: ./ruleset/custom-direct.yaml
+    interval: 28800
+
+  custom-proxy:
+    type: http
+    behavior: classical
+    url: "https://testingcf.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Proxy_Classical.yaml"
+    path: ./ruleset/custom-proxy.yaml
+    interval: 28800
+
+  notjp-list:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/mikal/my-clash-rules/main/notjp.list"
+    path: ./ruleset/notjp-list.yaml
+    interval: 28800
+
+  emby-list:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/mikal/my-clash-rules/main/emby.list"
+    path: ./ruleset/emby-list.yaml
+    interval: 28800
+
+  banad:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list"
+    path: ./ruleset/banad.yaml
+    interval: 28800
+  
+  # AI 服务
+  ai: {  <<: *domain, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs" }
+  
+  # 游戏相关
+  epic: {  <<: *domain, url: "https://ghproxy.inklazy.com/github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/epicgames.mrs" }
+  steam_cn: {  <<: *domain, url: "https://ghproxy.inklazy.com/github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/steam@cn.mrs"}
+  steam: {  <<: *domain, url: "https://ghproxy.inklazy.com/github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/steam.mrs"}
+  
+  # 谷歌服务
+  google_fcm: {  <<: *domain, url: "https://ghproxy.inklazy.com/github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/googlefcm.mrs"}
+  youtube_domain: { <<: *domain, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs"}
+  google_domain: { <<: *domain, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs"}
+  google_ip: { <<: *ip, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs"}
+  
+  # GitHub
+  github_domain: { <<: *domain, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs"}
+  
+  # 通讯软件
+  telegram_domain: { <<: *domain, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs"}
+  telegram_ip: { <<: *ip, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs"}
+  
+  # 流媒体
+  netflix_domain: { <<: *domain, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs"}
+  netflix_ip: { <<: *ip, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs"}
+  
+  # 电商支付
+  paypal_domain: { <<: *domain, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs"}
+  
+  # 微软服务
+  onedrive_domain: { <<: *domain, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/onedrive.mrs"}
+  microsoft_domain: { <<: *domain, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs"}
+  
+  # 苹果服务
+  apple_cn_domain: { <<: *domain, url: "https://ghproxy.inklazy.com/github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/apple@cn.mrs"}
+  apple_domain: { <<: *domain, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs"}
+  apple_ip: {<<: *ip, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo-lite/geoip/apple.mrs"}
+  
+  # 测速工具
+  speedtest_domain: { <<: *domain, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ookla-speedtest.mrs"}
+  
+  # TikTok
+  tiktok_domain: { <<: *domain, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs"}
+  
+  # 国外网站和国内网站
+  geolocation-!cn: { <<: *domain, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs"}
+  cn_domain: { <<: *domain, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs"}
+  cn_ip: { <<: *ip, url: "https://ghproxy.inklazy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"}
