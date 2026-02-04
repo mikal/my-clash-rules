@@ -1,11 +1,11 @@
-# Mihomo 链式代理配置文件
-# 基于原有规则，支持链式代理功能
-# 更新时间：2026年2月3日
+# Mihomo 链式代理配置文件 - V2b版本
+# 基于原有规则，支持链式代理功能，地区节点组改为自动测速
+# 更新时间：2026年2月4日
 
 # 代理提供者配置 - 请填入您的订阅链接
 proxy-providers:
   Mihomo-chain-relay:
-    url: "++++"
+    url: "https://xxxx"
     type: http
     interval: 86400
     health-check:
@@ -14,7 +14,7 @@ proxy-providers:
       interval: 300
     proxy: DIRECT
   Mihomo-chain-exit:
-    url: "xxxxxxxxxxxx"
+    url: "https://xxxx"
     type: http
     interval: 86400
     health-check:
@@ -108,353 +108,272 @@ dns:
 
 # 代理组模板
 std: &std
-  {type: select, proxies: [🚀 手动选择, CF官方优选, 🔮 负载均衡, 🔯 故障转移, 🔗 链式代理, 🇭🇰 香港节点, 🇺🇸 美国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇼🇸 台湾节点, ♻️ 自动选择, 🇰🇷 韩国节点, 🇨🇦 加拿大节点, 🇬🇧 英国节点, 🇫🇷 法国节点, 🇩🇪 德国节点, 🇳🇱 荷兰节点, 🇹🇷 土耳其节点, 🌐 其他地区, 🎯 全球直连]}
+  {type: select, proxies: [🚀 手动选择, 🔗 链式代理, 🏠 落地节点, 🌤️ CF官方优选, 🔮 负载均衡, 🔯 故障转移, 🇭🇰 香港节点, 🇺🇸 美国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇼🇸 台湾节点, ♻️ 自动选择, 🇰🇷 韩国节点, 🇨🇦 加拿大节点, 🇬🇧 英国节点, 🇫🇷 法国节点, 🇩🇪 德国节点, 🇳🇱 荷兰节点, 🇹🇷 土耳其节点, 🌐 其他地区, 🎯 全球直连]}
 
 dir: &dir
-  {type: select, proxies: [🎯 全球直连, 🚀 手动选择, 🔗 链式代理, 🇭🇰 香港节点, 🇺🇸 美国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇼🇸 台湾节点, ♻️ 自动选择, 🌐 其他地区]}
+  {type: select, proxies: [🎯 全球直连, 🚀 手动选择, 🔗 链式代理, 🏠 落地节点, 🌤️ CF官方优选, 🔮 负载均衡, 🔯 故障转移, 🇭🇰 香港节点, 🇺🇸 美国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇼🇸 台湾节点, ♻️ 自动选择, 🌐 其他地区]}
 
 # 代理组配置
 proxy-groups:
-;设置规则标志位
-;以下规则，按照从上往下的顺序遍历，优先命中上位规则，规则重复无影响
-;修改顺序会影响分流效果
-
-;本地地址和域名直连
-ruleset=🎯 全球直连,[]GEOSITE,private
-ruleset=🎯 全球直连,[]GEOIP,private,no-resolve
-;本项目收录的直连规则
-ruleset=🎯 全球直连,clash-classic:https://testingcf.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Direct_Classical.yaml,28800
-;本项目收录的代理规则
-ruleset=🚀 手动选择,clash-classic:https://testingcf.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Proxy_Classical.yaml,28800
-;谷歌在国内可用的域名直连
-ruleset=🎯 全球直连,[]GEOSITE,google-cn
-;国内游戏域名直连
-ruleset=🎯 全球直连,[]GEOSITE,category-games@cn
-;Steam 下载 CDN 直连
-ruleset=🎯 全球直连,clash-classic:https://testingcf.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Steam_CDN_Classical.yaml,28800
-;各大游戏平台下载域名直连
-ruleset=🎯 全球直连,[]GEOSITE,category-game-platforms-download
-;BT Tracker 相关域名直连
-ruleset=🎯 全球直连,[]GEOSITE,category-public-tracker
-;即时通讯包括了 Telegram/WhatsApp/Line 等海外主流即时通讯软件域名
-ruleset=🎯 全球直连,https://raw.githubusercontent.com/mikal/my-clash-rules/main/direct.list
-;个人自定义直连网站名单
-ruleset=🎯 全球直连,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Synology/Synology.list
-;群晖网站名单
-ruleset=🚫 广告拦截,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list
-ruleset=💬 即时通讯,[]GEOSITE,category-communication
-;社交媒体包括了 Twitter(X)/Facebook/Instagram 等海外主流社交媒体
-ruleset=⚫ NotJP,https://raw.githubusercontent.com/mikal/my-clash-rules/main/notjp.list
-ruleset=🌐 社交媒体,[]GEOSITE,category-social-media-!cn
-ruleset=🤖 ChatGPT,[]GEOSITE,openai
-ruleset=🤖 Copilot,[]GEOSITE,bing
-ruleset=🤖 AI服务,[]GEOSITE,category-ai-!cn
-ruleset=🚀 GitHub,[]GEOSITE,github
-;测速工具包括 SpeedTest 等主流测速工具域名
-ruleset=🚀 测速工具,[]GEOSITE,category-speedtest
-ruleset=🎮 Steam,[]GEOSITE,steam
-ruleset=📹 YouTube,[]GEOSITE,youtube
-ruleset=🎥 AppleTV+,[]GEOSITE,apple-tvplus
-ruleset=🍎 苹果服务,[]GEOSITE,apple
-ruleset=Ⓜ️ 微软服务,[]GEOSITE,microsoft
-ruleset=📢 谷歌FCM,[]GEOSITE,googlefcm
-ruleset=🇬 谷歌服务,[]GEOSITE,google
-ruleset=🎶 TikTok,[]GEOSITE,tiktok
-ruleset=🎥 Netflix,[]GEOSITE,netflix
-ruleset=🎥 DisneyPlus,[]GEOSITE,disney
-ruleset=🎥 HBO,[]GEOSITE,hbo
-ruleset=🎥 PrimeVideo,[]GEOSITE,primevideo
-;Emby 包括主流 Emby 服务相关域名
-ruleset=📺 Emby,https://raw.githubusercontent.com/mikal/my-clash-rules/main/emby.list
-ruleset=🎻 Spotify,[]GEOSITE,spotify
-ruleset=📺 Bahamut,[]GEOSITE,bahamut
-ruleset=🎮 游戏平台,[]GEOSITE,category-games
-ruleset=🌎 国外媒体,[]GEOSITE,category-entertainment
-ruleset=🛒 国外电商,[]GEOSITE,category-ecommerce
-ruleset=🚀 手动选择,[]GEOSITE,gfw
-ruleset=💬 即时通讯,[]GEOIP,telegram,no-resolve
-ruleset=🌐 社交媒体,[]GEOIP,twitter,no-resolve
-ruleset=🌐 社交媒体,[]GEOIP,facebook,no-resolve
-ruleset=🇬 谷歌服务,[]GEOIP,google,no-resolve
-ruleset=🎥 Netflix,[]GEOIP,netflix,no-resolve
-;由于 OpenClash 使用的大陆白名单收录不全，此处留有 geosite:cn 作为国内域名兜底
-ruleset=🎯 全球直连,[]GEOSITE,cn
-;由于 OpenClash 使用的大陆白名单收录不全，此处留有 geoip:cn 作为国内 IP 兜底
-ruleset=🎯 全球直连,[]GEOIP,cn,no-resolve
-;以上兜底规则会根据实际情况随时取消
-;PT/BT 优化开启会使 80/443 以外端口的流量直连
-ruleset=🔀 非标端口,clash-classic:https://testingcf.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Custom_Port_Direct.yaml,28800
-;国内冷门域名会命中漏网之鱼，如影响使用，请设置漏网之鱼直连
-;漏网之鱼直连时，无法通过 DNS 泄露测试，但是并不存在泄露
-ruleset=🐟 漏网之鱼,[]FINAL
-;设置规则标志位结束
-
-;设置节点分组标志位
-;节点地区分组参考本项目推荐机场而设立
-
-
-;下方参数请勿修改
-enable_rule_generator=true
-overwrite_original_rules=true
-  # 主要代理组
+  # 主要代理组 - 包含所有订阅节点 + 其他代理组选项
   - name: "🚀 手动选择"
     type: select
-    proxies: [♻️ 自动选择, 🔗 链式代理, 🇭🇰 香港节点, 🇺🇸 美国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇼🇸 台湾节点, 🇰🇷 韩国节点, 🇨🇦 加拿大节点, 🇬🇧 英国节点, 🇫🇷 法国节点, 🇩🇪 德国节点, 🇳🇱 荷兰节点, 🇹🇷 土耳其节点, 🌐 其他地区, 🎯 全球直连]
-    icon: "https://ghproxy.inklazy.com/raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/icon/qure/color/Proxy.png"
+    proxies: [♻️ 自动选择, 🔗 链式代理, 🌤️ CF官方优选, 🔮 负载均衡, 🔯 故障转移, 🇭🇰 香港节点, 🇺🇸 美国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇼🇸 台湾节点, 🇰🇷 韩国节点, 🇨🇦 加拿大节点, 🇬🇧 英国节点, 🇫🇷 法国节点, 🇩🇪 德国节点, 🇳🇱 荷兰节点, 🇹🇷 土耳其节点, 🌐 其他地区, 🎯 全球直连]
+    use: [Mihomo-chain-relay, Mihomo-chain-exit]
 
   - name: "♻️ 自动选择"
     type: url-test
-    include-all: true
+    use: [Mihomo-chain-relay, Mihomo-chain-exit]
     url: https://www.gstatic.com/generate_204
     interval: 300
     tolerance: 50
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Global.png?raw=true"
 
   # 链式代理核心组
   - name: "🔗 链式代理"
     type: relay
-    proxies: [中转节点选择, 落地节点选择]
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Zune.png?raw=true"
+    proxies: [🛫 中转节点, 🏠 落地节点]
 
-  - name: "中转节点选择"
+  - name: "🛫 中转节点"
     type: select
+    proxies: [♻️ 自动选择, 🌤️ CF官方优选, 🔮 负载均衡, 🔯 故障转移, 🇭🇰 香港节点, 🇺🇸 美国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇼🇸 台湾节点, 🇰🇷 韩国节点, 🇨🇦 加拿大节点, 🇬🇧 英国节点, 🇫🇷 法国节点, 🇩🇪 德国节点, 🇳🇱 荷兰节点, 🇹🇷 土耳其节点, 🌐 其他地区, 🎯 全球直连]
     use: [Mihomo-chain-relay]
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Zune.png?raw=true"
 
-  - name: "落地节点选择"
+  - name: "🏠 落地节点"
     type: select
     use: [Mihomo-chain-exit]
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Hong_Kong.png?raw=true"
+
+  # CF 官方优选组
+  - name: "🌤️ CF官方优选"
+    type: url-test
+    filter: "(官方|优选)"
+    use: [Mihomo-chain-relay, Mihomo-chain-exit]
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+
+  - name: "🔮 负载均衡"
+    type: load-balance
+    filter: "(官方|优选)"
+    use: [Mihomo-chain-relay, Mihomo-chain-exit]
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+
+  - name: "🔯 故障转移"
+    type: fallback
+    filter: "(官方|优选)"
+    use: [Mihomo-chain-relay, Mihomo-chain-exit]
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
 
   # 应用专用代理组
   - name: "💬 即时通讯"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Telegram.png?raw=true"
 
   - name: "🌐 社交媒体"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Twitter.png?raw=true"
 
   - name: "🚀 GitHub"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/GitHub.png?raw=true"
 
   - name: "🤖 ChatGPT"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/ChatGPT.png?raw=true"
 
   - name: "🤖 Copilot"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Microsoft.png?raw=true"
 
   - name: "🤖 AI服务"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/ChatGPT.png?raw=true"
 
   - name: "⚫ NotJP"
     type: select
     proxies: [🎯 全球直连, 🚀 手动选择, 🔗 链式代理, 🇭🇰 香港节点, 🇺🇸 美国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇼🇸 台湾节点, 🇰🇷 韩国节点]
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Japan.png?raw=true"
 
   - name: "🎶 TikTok"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/TikTok.png?raw=true"
 
   - name: "📹 YouTube"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/YouTube.png?raw=true"
 
   - name: "🎥 Netflix"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Netflix_b.png?raw=true"
 
   - name: "🎥 DisneyPlus"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Disney.png?raw=true"
 
   - name: "🎥 HBO"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/HBO.png?raw=true"
 
   - name: "🎥 PrimeVideo"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Prime_Video.png?raw=true"
 
   - name: "🎥 AppleTV+"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Apple_TV.png?raw=true"
 
   - name: "📺 Emby"
     type: select
-    proxies: [🇭🇰 香港节点, 🇺🇸 美国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇼🇸 台湾节点, 🇰🇷 韩国节点, 🇨🇦 加拿大节点, 🇬🇧 英国节点, 🇫🇷 法国节点, 🇩🇪 德国节点, 🇳🇱 荷兰节点, 🇹🇷 土耳其节点, 🌐 其他地区, 🚀 手动选择, ♻️ 自动选择, 🎯 全球直连]
+    proxies: [🇭🇰 香港节点, 🔗 链式代理, 🇺🇸 美国节点, 🇯🇵 日本节点, 🇸🇬 新加坡节点, 🇼🇸 台湾节点, 🇰🇷 韩国节点, 🇨🇦 加拿大节点, 🇬🇧 英国节点, 🇫🇷 法国节点, 🇩🇪 德国节点, 🇳🇱 荷兰节点, 🇹🇷 土耳其节点, 🌐 其他地区, 🚀 手动选择, ♻️ 自动选择, 🎯 全球直连]
     filter: "(Emby)"
-    include-all: true
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Emby.png?raw=true"
+    use: [Mihomo-chain-relay, Mihomo-chain-exit]
 
   - name: "🎻 Spotify"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Spotify.png?raw=true"
 
   - name: "📺 Bahamut"
     type: select
     proxies: [🇼🇸 台湾节点, 🚀 手动选择, 🎯 全球直连]
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Bahamut.png?raw=true"
 
   - name: "🌎 国外媒体"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Streaming.png?raw=true"
 
   - name: "🛒 国外电商"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/PayPal_business.png?raw=true"
 
   - name: "📢 谷歌FCM"
     <<: *dir
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/FCM_Firebase_Cloud_Messaging.png?raw=true"
 
   - name: "🇬 谷歌服务"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Google.png?raw=true"
 
   - name: "🍎 苹果服务"
     <<: *dir
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Apple_black.png?raw=true"
 
   - name: "Ⓜ️ 微软服务"
     <<: *dir
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Microsoft.png?raw=true"
 
   - name: "🎮 游戏平台"
     <<: *dir
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/EPIC.png?raw=true"
 
   - name: "🎮 Steam"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Steam.png?raw=true"
 
   - name: "🚀 测速工具"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/SpeedTest.png?raw=true"
 
-  # 地区节点组
+  # 地区节点组 - 改为 url-test 自动测速选择最快节点
   - name: "🇭🇰 香港节点"
-    type: select
-    include-all: true
+    type: url-test
+    use: [Mihomo-chain-relay]
     filter: "(?i)港|hk|hongkong|hong kong"
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Hong_Kong.png?raw=true"
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
 
   - name: "🇺🇸 美国节点"
-    type: select
-    include-all: true
+    type: url-test
+    use: [Mihomo-chain-relay]
     filter: "(?i)美|us|unitedstates|united states"
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/USA.png?raw=true"
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
 
   - name: "🇯🇵 日本节点"
-    type: select
-    include-all: true
+    type: url-test
+    use: [Mihomo-chain-relay]
     filter: "(?i)日|jp|japan"
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Japan.png?raw=true"
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
 
   - name: "🇸🇬 新加坡节点"
-    type: select
-    include-all: true
+    type: url-test
+    use: [Mihomo-chain-relay]
     filter: "(?i)新加坡|坡|狮城|SG|Singapore"
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Singapore.png?raw=true"
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
 
   - name: "🇼🇸 台湾节点"
-    type: select
-    include-all: true
+    type: url-test
+    use: [Mihomo-chain-relay]
     filter: "(?i)台|tw|taiwan"
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Taiwan.png?raw=true"
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
 
   - name: "🇰🇷 韩国节点"
-    type: select
-    include-all: true
+    type: url-test
+    use: [Mihomo-chain-relay]
     filter: "(?i)韩|kr|korea"
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/South_Korea.png?raw=true"
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
 
   - name: "🇨🇦 加拿大节点"
-    type: select
-    include-all: true
+    type: url-test
+    use: [Mihomo-chain-relay]
     filter: "(?i)加拿大|canada|ca"
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Canada.png?raw=true"
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
 
   - name: "🇬🇧 英国节点"
-    type: select
-    include-all: true
+    type: url-test
+    use: [Mihomo-chain-relay]
     filter: "(?i)英|uk|britain|united kingdom"
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/United_Kingdom.png?raw=true"
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
 
   - name: "🇫🇷 法国节点"
-    type: select
-    include-all: true
+    type: url-test
+    use: [Mihomo-chain-relay]
     filter: "(?i)法|fr|france"
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/France.png?raw=true"
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
 
   - name: "🇩🇪 德国节点"
-    type: select
-    include-all: true
+    type: url-test
+    use: [Mihomo-chain-relay]
     filter: "(?i)德|de|germany"
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Germany.png?raw=true"
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
 
   - name: "🇳🇱 荷兰节点"
-    type: select
-    include-all: true
+    type: url-test
+    use: [Mihomo-chain-relay]
     filter: "(?i)荷兰|nl|netherlands"
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Netherlands.png?raw=true"
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
 
   - name: "🇹🇷 土耳其节点"
-    type: select
-    include-all: true
+    type: url-test
+    use: [Mihomo-chain-relay]
     filter: "(?i)土耳其|tr|turkey"
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Turkey.png?raw=true"
-
-  # 负载均衡和故障转移
-  - name: "🔮 负载均衡"
-    type: load-balance
-    include-all: true
-    url: http://www.gstatic.com/generate_204
+    url: https://www.gstatic.com/generate_204
     interval: 300
     tolerance: 50
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Load_Balance.png?raw=true"
-
-  - name: "🔯 故障转移"
-    type: fallback
-    include-all: true
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    tolerance: 50
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Fallback.png?raw=true"
 
   - name: "🌐 其他地区"
-    type: select
-    include-all: true
+    type: url-test
+    use: [Mihomo-chain-relay]
     filter: "^(?!.*(港|HK|hk|Hong Kong|HongKong|hongkong|深港|美|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|US|United States|UnitedStates|日本|川日|东京|大阪|泉日|埼玉|沪日|深日|(?<!尼|-)日|JP|Japan|🇯🇵|新加坡|坡|狮城|SG|Singapore|台|新北|彰化|TW|Taiwan|KR|Korea|KOR|首尔|韩|韓|加拿大|Canada|渥太华|温哥华|卡尔加里|英国|Britain|United Kingdom|England|伦敦|法国|France|巴黎|德国|Germany|柏林|法兰克福|荷兰|Netherlands|阿姆斯特丹|土耳其|Turkey|Türkiye)).*"
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Global.png?raw=true"
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
 
   - name: "🐟 漏网之鱼"
     <<: *std
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Omission.png?raw=true"
-
-  - name: "🔀 非标端口"
-    type: select
-    proxies: [🐟 遵循规则, 🎯 全球直连]
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Global.png?raw=true"  
-
-  - name: "🎯 全球直连"
-    type: select
-    proxies: [DIRECT]
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/Direct.png?raw=true"
-
-  - name: "🚫 广告拦截"
-    type: select
-    proxies: [REJECT, DIRECT]
-    icon: "https://ghproxy.inklazy.com/github.com/Vbaethon/HOMOMIX/blob/main/Icon/Color/Large/AdBlock.png?raw=true"
 
   - name: "🐟 遵循规则"
     type: select
     proxies: [🐟 漏网之鱼]
 
+  - name: "🔀 非标端口"
+    type: select
+    proxies: [🐟 遵循规则, 🎯 全球直连]
+
+  - name: "🎯 全球直连"
+    type: select
+    proxies: [DIRECT]
+
+  - name: "🚫 广告拦截"
+    type: select
+    proxies: [REJECT, DIRECT]
 # 分流规则
 rules:
   # 本地地址和域名直连
