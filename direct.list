@@ -22,6 +22,17 @@ DOMAIN-SUFFIX,ip-api.istatmenus.app
 # Cn Shopping 
 DOMAIN-SUFFIX,malldongli.com
 
+#My DDNS Domain
+DOMAIN-SUFFIX,501.hong88.xyz
+DOMAIN-SUFFIX,ql.hong88.xyz
+DOMAIN-SUFFIX,aria.hong88.xyz
+DOMAIN-SUFFIX,ahong.familyds.com
+DOMAIN-SUFFIX,rss.hong88.xyz
+DOMAIN-SUFFIX,plex.hong88.xyz
+DOMAIN-SUFFIX,freshrss.hong88.xyz
+DOMAIN-SUFFIX,sub.hong88.xyz
+DOMAIN-SUFFIX,subconv.hong88.xyz
+
 # scholar
 DOMAIN-SUFFIX,acm.org
 DOMAIN-SUFFIX,acs.org
