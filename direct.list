@@ -5,6 +5,7 @@ DOMAIN-SUFFIX,deardeer.fun
 DOMAIN-SUFFIX,czlx.email
 DOMAIN-SUFFIX,chenzl.fun
 
+
 # airport
 IP-CIDR,47.112.1.138/32
 
@@ -21,6 +22,8 @@ DOMAIN-SUFFIX,ip-api.istatmenus.app
 
 # Cn Shopping 
 DOMAIN-SUFFIX,malldongli.com
+DOMAIN-SUFFIX,yunwu.ai
+
 
 #My DDNS Domain
 DOMAIN-SUFFIX,501.hong88.xyz
@@ -32,6 +35,7 @@ DOMAIN-SUFFIX,plex.hong88.xyz
 DOMAIN-SUFFIX,freshrss.hong88.xyz
 DOMAIN-SUFFIX,sub.hong88.xyz
 DOMAIN-SUFFIX,subconv.hong88.xyz
+DOMAIN-SUFFIX,browser.hong88.xyz
 
 # scholar
 DOMAIN-SUFFIX,acm.org
