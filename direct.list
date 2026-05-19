@@ -20,6 +20,8 @@ DOMAIN-SUFFIX,testipv6.cn
 DOMAIN-SUFFIX,test-ipv6.com
 DOMAIN-SUFFIX,ip-api.istatmenus.app
 DOMAIN-SUFFIX,ip.istatmenus.app
+DOMAIN-SUFFIX,ip4.istatmenus.app
+DOMAIN-SUFFIX,ip6.istatmenus.app
 
 # Cn Shopping 
 DOMAIN-SUFFIX,malldongli.com
