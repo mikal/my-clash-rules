@@ -9,3 +9,6 @@ DOMAIN-SUFFIX,v1.mk
 # claude
 DOMAIN-SUFFIX,anthropic.com
 DOMAIN-SUFFIX,claude.ai
+
+# kiro
+DOMAIN-SUFFIX,kiro.dev
